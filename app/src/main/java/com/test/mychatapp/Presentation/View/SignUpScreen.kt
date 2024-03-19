@@ -21,11 +21,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.test.mychatapp.Presentation.ViewModel.AuthViewModel
 
 @Composable
 fun SignUpScreen(
-    //authViewModel: AuthViewModel,
-    //onNavigateToLogin: () -> Unit
+    authViewModel: AuthViewModel,
+    onNavigateToLogin: () -> Unit
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -65,7 +66,7 @@ fun SignUpScreen(
             .padding(8.dp))
 
         Button(onClick = {
-                         //authViewModel.signUp(emai) // need to addd params
+                            authViewModel.signUp(email,password,firstName,secondName)
                             email=""
                             password=""
                             firstName =""
@@ -78,13 +79,13 @@ fun SignUpScreen(
         }
         Spacer(modifier = Modifier.height(16.dp))
 
-        Text(text = "Alredy have an accoount? Sign in.", modifier =Modifier.clickable {  })
+        Text(text = "Alredy have an accoount? Sign in.", modifier =Modifier.clickable {  onNavigateToLogin()})
     }
 
 }
 
-@Preview
-@Composable
-fun SignUpScreenPreview(){
-    SignUpScreen()
-}
+//@Preview
+//@Composable
+//fun SignUpScreenPreview(){
+//    SignUpScreen()
+//}
