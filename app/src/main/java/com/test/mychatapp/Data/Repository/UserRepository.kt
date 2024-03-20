@@ -1,5 +1,6 @@
 package com.test.mychatapp.Data.Repository
 
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.test.mychatapp.Data.Model.UserModel
@@ -35,4 +36,23 @@ class UserRepository(private val auth: FirebaseAuth,
     }catch (e:Exception){
         Result.failure(e)
     }
+
+    suspend fun getCurrentUser(): Result<UserModel> = try {
+        val uid = auth.currentUser?.email
+        if (uid != null) {
+            val userDocument = firestore.collection("users").document(uid).get().await()
+            val user = userDocument.toObject(UserModel::class.java)
+            if (user != null) {
+                Log.d("user2","$uid")
+                Result.success(user)
+            } else {
+                Result.failure(Exception("User data not found"))
+            }
+        } else {
+            Result.failure(Exception("User not authenticated"))
+        }
+    } catch (e: Exception) {
+        Result.failure(e)
+    }
+
 }
